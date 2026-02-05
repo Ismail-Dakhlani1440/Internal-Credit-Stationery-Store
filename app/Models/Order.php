@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+
+    use \Illuminate\Database\Eloquent\Factories\HasFactory;
     protected $fillable = ['total_price','user_id','product_id'];
 
     public function user(){
