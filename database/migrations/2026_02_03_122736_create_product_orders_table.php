@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('product_orders', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->enum('satuts' , ['approved', 'pending','deneid']);
-            $table->foreignId('user_id')->constrained();
+            $table->enum('status' , ['approved', 'pending','denied']);
+            $table->foreignId('order_id')->constrained();
             $table->foreignId('product_id')->constrained();
             $table->timestamps();
         });

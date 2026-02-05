@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Manger;
 use Illuminate\Http\Request;
+use App\Models\Order;
 
-class MangerController extends Controller
+class OrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $orders = Order::all();
+
+        return view('orders.index', compact('orders'));
     }
 
     /**
@@ -34,7 +36,7 @@ class MangerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Manger $manger)
+    public function show(string $id)
     {
         //
     }
@@ -42,7 +44,7 @@ class MangerController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Manger $manger)
+    public function edit(string $id)
     {
         //
     }
@@ -50,7 +52,7 @@ class MangerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Manger $manger)
+    public function update(Request $request, string $id)
     {
         //
     }
@@ -58,7 +60,7 @@ class MangerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Manger $manger)
+    public function destroy(string $id)
     {
         //
     }
