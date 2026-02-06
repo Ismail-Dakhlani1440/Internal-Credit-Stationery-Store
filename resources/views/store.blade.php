@@ -234,6 +234,9 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            display: block;
         }
 
         .btn-edit:hover {
@@ -358,7 +361,7 @@
                                 value="{{ $category->id }}"
                                 {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}
                             >
-                            {{ $category->name }}
+                            {{ $category->title }}
                         </label>
                     @endforeach
                 </div>
@@ -392,7 +395,6 @@
         <main class="products-grid">
             <div class="products-header">
                 <h2>All Products</h2>
-                <span class="products-count">{{ $products->total() }} products found</span>
             </div>
 
             <div class="cards-container">
@@ -405,39 +407,41 @@
                         >
                         
                         <div class="product-info">
-                            <div class="product-category">{{ $product->category->name ?? 'Uncategorized' }}</div>
+                            <div class="product-category">{{ $product->categorie->title ?? 'Uncategorized' }}</div>
                             <h3 class="product-name">{{ $product->name }}</h3>
                             <p class="product-description">{{ $product->description }}</p>
                             
                             <div class="product-footer">
-                                <span class="product-price">${{ number_format($product->price, 2) }}</span>
+                                <span class="product-price">${{ number_format($product->tokens_required, 2) }}</span>
                                 <button 
                                     class="add-to-cart-btn" 
-                                    onclick="addToCart({{ $product->id }}, '{{ $product->name }}', {{ $product->price }}, '{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}', '{{ $product->category->name ?? 'Uncategorized' }}')"
+                                    data-id="{{ $product->id }}"
+                                    data-name="{{ htmlspecialchars($product->name, ENT_QUOTES) }}"
+                                    data-tokens_required="{{ $product->tokens_required }}"
+                                    data-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}"
+                                    data-category="{{ htmlspecialchars($product->categorie->title ?? 'Uncategorized', ENT_QUOTES) }}"
+                                    onclick="addToCart(this)"
                                 >
                                     Add to Cart
                                 </button>
                             </div>
 
-                            @if(auth()->check() && auth()->user()->role === 'admin')
-                                <div class="admin-actions">
-                                    <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
-                                        Edit
-                                    </a>
-                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="flex: 1;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button 
-                                            type="submit" 
-                                            class="btn-delete" 
-                                            onclick="return confirm('Are you sure you want to delete this product?')"
-                                            style="width: 100%;"
-                                        >
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                            @endif
+                            @auth
+                                @if(auth()->user()->role === 'admin')
+                                    <div class="admin-actions">
+                                        <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
+                                            Edit
+                                        </a>
+                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-delete" style="width: 100%;">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                @endif
+                            @endauth
                         </div>
                     </div>
                 @empty
@@ -448,9 +452,7 @@
             </div>
 
             <!-- Pagination -->
-            <div style="margin-top: 30px;">
-                {{ $products->links() }}
-            </div>
+            
         </main>
     </div>
 
@@ -460,8 +462,14 @@
             updateCartCount();
         });
 
-        // Add product to cart
-        function addToCart(id, name, price, image, category) {
+        // Add product to cart - FIXED: button element passed instead of individual parameters
+        function addToCart(button) {
+            const id = parseInt(button.dataset.id);
+            const name = button.dataset.name;
+            const tokens_required = parseFloat(button.dataset.tokens_required);
+            const image = button.dataset.image;
+            const category = button.dataset.category;
+            
             // Get existing cart from localStorage or create new array
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             
@@ -477,7 +485,7 @@
                 const product = {
                     id: id,
                     name: name,
-                    price: price,
+                    tokens_required: tokens_required,
                     image: image,
                     category: category,
                     quantity: 1,
@@ -494,13 +502,13 @@
             // Update cart count
             updateCartCount();
             
-            // Add visual feedback to button
-            event.target.textContent = '✓ Added';
-            event.target.classList.add('added');
+            // Add visual feedback to button - FIXED: use button parameter
+            button.textContent = '✓ Added';
+            button.classList.add('added');
             
             setTimeout(() => {
-                event.target.textContent = 'Add to Cart';
-                event.target.classList.remove('added');
+                button.textContent = 'Add to Cart';
+                button.classList.remove('added');
             }, 2000);
         }
 
@@ -524,7 +532,7 @@
 
         // View cart (redirect to cart page)
         function viewCart() {
-            window.location.href = '/cart'; // Change this to your cart route
+           window.location.href = '/cart';
         }
 
         // Additional helper functions
