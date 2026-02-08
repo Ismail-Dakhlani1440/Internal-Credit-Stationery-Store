@@ -390,7 +390,11 @@
                 <a href="{{ route('products.index') }}" class="reset-btn" style="display: block; text-align: center; text-decoration: none;">Reset Filters</a>
             </form>
         </aside>
-
+  @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
         <!-- Right Side - Products Grid -->
         <main class="products-grid">
             <div class="products-header">
@@ -410,9 +414,12 @@
                             <div class="product-category">{{ $product->categorie->title ?? 'Uncategorized' }}</div>
                             <h3 class="product-name">{{ $product->name }}</h3>
                             <p class="product-description">{{ $product->description }}</p>
-                            
+                             @if($product->premium)
+                                <div class="premium-badge">⭐ Premium</div>
+                            @endif  
                             <div class="product-footer">
                                 <span class="product-price">${{ number_format($product->tokens_required, 2) }}</span>
+                               
                                 <button 
                                     class="add-to-cart-btn" 
                                     data-id="{{ $product->id }}"
@@ -421,8 +428,12 @@
                                     data-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}"
                                     data-category="{{ htmlspecialchars($product->categorie->title ?? 'Uncategorized', ENT_QUOTES) }}"
                                     onclick="addToCart(this)"
-                                >
-                                    Add to Cart
+                                > @if($product->is_premium)
+        Premium Only
+    @else
+        Add to Cart
+    @endif
+                                  
                                 </button>
                             </div>
 

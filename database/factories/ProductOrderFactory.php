@@ -19,8 +19,7 @@ class ProductOrderFactory extends Factory
         return [
             'product_id' => fake()->numberBetween(1, 30),
             'order_id' => fake()->numberBetween(1, 10),
-            'quantity' => fake()->numberBetween(1, 10),
-            'status' => fake()->randomElement(['approved', 'pending','denied']),
+            'quantity' => fake()->numberBetween(1, 10)
         ];
     }
 }

@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_orders', function (Blueprint $table) {
+        Schema::create('product_order', function (Blueprint $table) {
             $table->id();
             $table->integer('quantity');
-            $table->enum('status' , ['approved', 'pending','denied']);
+            $table->integer('tokens_required');
+            $table->enum('status', ['approved', 'pending','rejected']);
             $table->foreignId('order_id')->constrained();
             $table->foreignId('product_id')->constrained();
             $table->timestamps();
