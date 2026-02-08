@@ -1,13 +1,23 @@
 <?php
 
+
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
+
+Route::resource('products', ProductController::class);
+Route::resource('orders', OrderController::class);
+Route::get('/cart', function(){
+    return view('cart');
+    });
 Route::get('/', function () {
     return redirect('/login');
 });
-
+Route::resource('orders', OrderController::class);
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth'])
     ->name('dashboard');

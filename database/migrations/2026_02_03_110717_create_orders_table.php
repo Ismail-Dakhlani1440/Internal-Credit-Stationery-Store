@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('total_price');
+            $table->enum('status' , ['approved', 'pending','rejected' ,'partial'])->default('pending');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('product_id')->constrained();
             $table->timestamps();
         });
     }
