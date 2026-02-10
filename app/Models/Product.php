@@ -13,6 +13,6 @@ class Product extends Model
         return $this->belongsTo(Categorie::class);
     }
     public function orders(){
-        return $this->belongsToMany(Order::class)->withPivot('quantity' ,'satuts')->withTimestamps();
+        return $this->belongsToMany(Order::class , 'product_order')->withPivot('quantity','tokens_required','status')->withTimestamps();
     }
 }
