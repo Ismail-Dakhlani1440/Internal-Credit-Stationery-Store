@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\ProductOrder>
  */
 class ProductOrderFactory extends Factory
 {
@@ -17,10 +17,9 @@ class ProductOrderFactory extends Factory
     public function definition(): array
     {
         return [
+            'quantity' => fake()->numberBetween(1, 10),
             'product_id' => fake()->numberBetween(1, 30),
             'order_id' => fake()->numberBetween(1, 10),
-            'quantity' => fake()->numberBetween(1, 10),
-            'status' => fake()->randomElement(['approved', 'pending','denied']),
         ];
     }
 }

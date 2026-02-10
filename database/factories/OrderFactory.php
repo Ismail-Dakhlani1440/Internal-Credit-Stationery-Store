@@ -18,8 +18,8 @@ class OrderFactory extends Factory
     {
         return [
             'total_price' => fake()->randomFloat(2, 10, 1000),
+            'status' => fake()->randomElement(['approved', 'pending','denied']),
             'user_id' => fake()->numberBetween(2, 34),
-            'product_id' => fake()->numberBetween(1, 30),
         ];
     }
 }
