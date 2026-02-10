@@ -8,12 +8,13 @@
 <body>
     <h1>Order Details</h1>
     <div>
-        <foreach($orders as $order)
+        <foreach($orders as $order)>
             <div>
                 <h2>Order #{{ $order->id }}</h2>
-                <p>Customer: {{ $order->customer_name }}</p>
-                <p>Total Amount: ${{ $order->total_amount }}</p>
+                <p>Customer: {{ $order->user->name }}</p>
+                <p>Total Amount: ${{ $order->total_price }}</p>
             </div>
+        <endforeach>
         
     </div>
 </body>
