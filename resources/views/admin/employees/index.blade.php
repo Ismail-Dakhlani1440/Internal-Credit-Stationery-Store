@@ -33,7 +33,7 @@
                             <td>{{ $employee->email }}</td>
                             <td>
                                 <span class="badge badge-blue">
-                                    {{ $employee->role->name ?? 'N/A' }}
+                                    {{ $employee->role->title ?? 'N/A' }}
                                 </span>
                             </td>
                             <td>

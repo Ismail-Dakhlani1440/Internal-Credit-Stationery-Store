@@ -491,20 +491,11 @@
             </div>
             
             <nav class="nav-menu">
-                <a href="{{ route('employees.index') }}" class="nav-item {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">
-                    📊 Dashboard
-                </a>
                 <a href="{{ route('employees.index') }}" class="nav-item {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
                     👥 Employees
                 </a>
-                <a href="#" class="nav-item">
-                    🏢 Departments
-                </a>
-                <a href="#" class="nav-item">
-                    🎯 Roles
-                </a>
-                <a href="#" class="nav-item">
-                    ⚙️ Settings
+                <a href="{{ route('inventory.index') }}" class="nav-item {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
+                    📦 Inventory
                 </a>
             </nav>
         </aside>
@@ -517,7 +508,7 @@
                 <div class="user-menu">
                     <div class="user-info">
                         <div class="user-name">{{ Auth::user()->name }}</div>
-                        <div class="user-role">{{ Auth::user()->role->name ?? 'Administrator' }}</div>
+                        <div class="user-role">{{ Auth::user()->role->title ?? 'Administrator' }}</div>
                     </div>
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf
