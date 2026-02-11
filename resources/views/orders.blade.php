@@ -83,7 +83,7 @@
             <td style="padding:8px;">
                 @if($product->pivot->status == 'pending')
                     <span style="color:#f39c12;">Pending</span>
-                @elseif($product->pivot->status == 'accepted')
+                @elseif($product->pivot->status == 'approved')
                     <span style="color:#27ae60;">Accepted</span>
                 @else
                     <span style="color:#c0392b;">Rejected</span>
