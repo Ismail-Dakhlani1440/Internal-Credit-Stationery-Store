@@ -11,9 +11,21 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
+        $products = Product::query();
+        
+        
+        if($request->filled('categories')){
+             $products->whereIn('categorie_id' , $request->categories);
+        }
+        if($request->filled('min_price')){
+            $products->where('tokens_required' ,'>=' ,$request->min_price);
+        }
+        if($request->filled('max_price')){
+            $products->where('tokens_required' ,'<=' ,$request->max_price);
+        }
+      $products  = $products->paginate();
         $categories = Categorie::all();
         return view('store' , compact('products', 'categories'));
     }
@@ -23,7 +35,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('');
+     
     }
 
     /**
@@ -34,8 +46,14 @@ class ProductController extends Controller
         $validated = $request->validate([
            'name' => 'required|string',
            'stock' => 'required|integer',
+           'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
            'categorie_id' => 'required|exisits:categories,id',
         ]);
+        if($request->hasFile('image')){
+            $path = $request->file('image')->store('images' ,'public');
+            $validated['image'] = $path;
+        }
+
         Product::create($validated);
         return redirect()->route('')->with('success','product added successfully');
     }
@@ -46,7 +64,7 @@ class ProductController extends Controller
     public function show(string $id)
     {
         $product = Product::find($id);
-        return view('', compact('product'));
+        
     }
 
     /**
@@ -55,7 +73,7 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::find($id);
-        return view('', compact('product'));
+        
     }
 
     /**
@@ -83,4 +101,5 @@ class ProductController extends Controller
         $product->delete();
         return redirect()->route('products.index')->with('success','product deleted successfully');
     }
+   
 }

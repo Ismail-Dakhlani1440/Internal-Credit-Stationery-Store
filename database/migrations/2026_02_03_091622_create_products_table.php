@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('stock');
             $table->boolean('premium');
+            $table->string('image');
             $table->integer('tokens_required');
             $table->foreignId('categorie_id')->constrained()->cascadeOnDelete();
             $table->timestamps();

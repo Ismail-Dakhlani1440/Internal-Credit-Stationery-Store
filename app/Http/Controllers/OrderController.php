@@ -142,7 +142,10 @@ class OrderController
      */
     public function show(string $id)
     {
-        //
+        $orders = auth()->user()->orders()->get();
+       
+        return view('orders', compact('orders'));
+
     }
 
     /**
