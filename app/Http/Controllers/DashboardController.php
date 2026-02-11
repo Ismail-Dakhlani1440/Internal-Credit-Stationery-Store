@@ -9,7 +9,7 @@ class DashboardController
         $user = auth()->user();
 
         if ($user->role_id == 1) {
-            return view('dashboard.admin');
+            return redirect()->route('employees.index');
         }
 
         if ($user->role_id == 2) {
