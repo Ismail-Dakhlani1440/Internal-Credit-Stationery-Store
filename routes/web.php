@@ -7,7 +7,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\EmployeeController;
 
+Route::prefix('admin')->group(function () {
+    Route::resource('employees', EmployeeController::class);
+});
 
 Route::resource('products', ProductController::class);
 Route::resource('orders', OrderController::class);

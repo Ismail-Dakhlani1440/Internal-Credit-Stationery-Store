@@ -47,7 +47,7 @@ class ProductController extends Controller
            'name' => 'required|string',
            'stock' => 'required|integer',
            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-           'categorie_id' => 'required|exisits:categories,id',
+           'categorie_id' => 'required|exists:categories,id',
         ]);
         if($request->hasFile('image')){
             $path = $request->file('image')->store('images' ,'public');
