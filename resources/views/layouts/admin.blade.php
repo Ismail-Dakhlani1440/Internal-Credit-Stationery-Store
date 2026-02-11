@@ -491,20 +491,11 @@
             </div>
             
             <nav class="nav-menu">
-                <a href="{{ route('employees.index') }}" class="nav-item {{ request()->routeIs('dashboard.admin') ? 'active' : '' }}">
-                    📊 Dashboard
-                </a>
                 <a href="{{ route('employees.index') }}" class="nav-item {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
                     👥 Employees
                 </a>
-                <a href="#" class="nav-item">
-                    🏢 Departments
-                </a>
-                <a href="#" class="nav-item">
-                    🎯 Roles
-                </a>
-                <a href="#" class="nav-item">
-                    ⚙️ Settings
+                <a href="{{ route('inventory.index') }}" class="nav-item {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
+                    📦 Inventory
                 </a>
             </nav>
         </aside>
