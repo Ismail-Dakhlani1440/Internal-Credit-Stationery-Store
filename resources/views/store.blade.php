@@ -338,11 +338,6 @@
         }
     </style>
 
-    <!-- Cart Badge -->
-    <div class="cart-badge" onclick="viewCart()">
-        🛒 Cart <span class="cart-count" id="cartCount">0</span>
-    </div>
-
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
@@ -405,7 +400,7 @@
                 @forelse($products as $product)
                     <div class="product-card">
                         <img 
-                            src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}" 
+                            src="{{ 'https://pisces.bbystatic.com/image2/BestBuy_US/images/products/48617ba7-1619-42eb-b114-79bcc167ce03.jpg;maxHeight=1920;maxWidth=900?format=webp' }}" 
                             alt="{{ $product->name }}" 
                             class="product-image"
                         >
@@ -418,7 +413,7 @@
                                 <div class="premium-badge">⭐ Premium</div>
                             @endif  
                             <div class="product-footer">
-                                <span class="product-price">${{ number_format($product->tokens_required, 2) }}</span>
+                                <span class="product-price">🪙{{ number_format($product->tokens_required, 2) }}</span>
                                
                                 <button 
                                     class="add-to-cart-btn" 
