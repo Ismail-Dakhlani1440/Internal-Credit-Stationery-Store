@@ -10,7 +10,7 @@ class Order extends Model
 {
 
     use \Illuminate\Database\Eloquent\Factories\HasFactory;
-    protected $fillable = ['total_price','user_id','product_id','status'];
+    protected $fillable = ['total_price','user_id','status'];
 
     public function user(){
         return $this->belongsTo(User::class);
