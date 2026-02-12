@@ -507,7 +507,7 @@
                 
                 <div class="user-menu">
                     <div class="user-info">
-                        <div class="user-name">{{ Auth::user()->name }}</div>
+                        <div class="user-name">{{ Auth::user()?->name ?? 'Guest' }}</div>
                         <div class="user-role">{{ Auth::user()->role->title ?? 'Administrator' }}</div>
                     </div>
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">

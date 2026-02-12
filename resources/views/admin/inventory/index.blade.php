@@ -20,6 +20,7 @@
                         <th>Product Name</th>
                         <th>Category</th>
                         <th>Quantity</th>
+                        <th>Image</th>
                         <th>Price</th>
                         <th>Type</th>
                         <th>Actions</th>
@@ -33,13 +34,18 @@
                             </td>
                             <td>
                                 <span class="badge badge-purple">
-                                    {{ $product->categorie->name ?? 'Uncategorized' }}
+                                    {{ $product->categorie->title ?? 'Uncategorized' }}
                                 </span>
                             </td>
                             <td>
                                 <span class="badge badge-blue">
                                     {{ $product->stock }}
                                 </span>
+                            </td>
+                            <td>
+                                @if($product->image)
+                                <img src="{{ asset('storage/' . $product->image) }}" width="80">
+                                @endif
                             </td>
                             <td>
                                 <strong>{{ number_format($product->tokens_required) }}</strong>
