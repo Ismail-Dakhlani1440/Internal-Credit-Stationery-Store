@@ -20,7 +20,7 @@
             background-color: white;
             padding: 25px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             height: fit-content;
             position: sticky;
             top: 20px;
@@ -132,13 +132,13 @@
             background-color: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
 
         .product-image {
@@ -268,7 +268,7 @@
             color: white;
             padding: 15px 25px;
             border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             animation: slideIn 0.3s ease-out;
             display: none;
@@ -283,6 +283,7 @@
                 transform: translateX(400px);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -301,7 +302,7 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             z-index: 999;
             display: flex;
             align-items: center;
@@ -349,15 +350,14 @@
                 <div class="filter-section">
                     <h3>Categories</h3>
                     @foreach($categories as $category)
-                        <label>
-                            <input 
-                                type="checkbox" 
-                                name="categories[]" 
-                                value="{{ $category->id }}"
-                                {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}
-                            >
-                            {{ $category->title }}
-                        </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="categories[]"
+                            value="{{ $category->id }}"
+                            {{ in_array($category->id, request('categories', [])) ? 'checked' : '' }}>
+                        {{ $category->title }}
+                    </label>
                     @endforeach
                 </div>
 
@@ -365,19 +365,17 @@
                 <div class="filter-section">
                     <h3>Price Range</h3>
                     <div class="price-inputs">
-                        <input 
-                            type="number" 
-                            name="min_price" 
-                            placeholder="Min" 
-                            value="{{ request('min_price') }}"
-                        >
+                        <input
+                            type="number"
+                            name="min_price"
+                            placeholder="Min"
+                            value="{{ request('min_price') }}">
                         <span>-</span>
-                        <input 
-                            type="number" 
-                            name="max_price" 
-                            placeholder="Max" 
-                            value="{{ request('max_price') }}"
-                        >
+                        <input
+                            type="number"
+                            name="max_price"
+                            placeholder="Max"
+                            value="{{ request('max_price') }}">
                     </div>
                 </div>
 
@@ -385,11 +383,11 @@
                 <a href="{{ route('products.index') }}" class="reset-btn" style="display: block; text-align: center; text-decoration: none;">Reset Filters</a>
             </form>
         </aside>
-  @if (session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-@endif
+        @if (session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <!-- Right Side - Products Grid -->
         <main class="products-grid">
             <div class="products-header">
@@ -398,67 +396,65 @@
 
             <div class="cards-container">
                 @forelse($products as $product)
-                    <div class="product-card">
-                        <img 
-                            src="{{ 'https://pisces.bbystatic.com/image2/BestBuy_US/images/products/48617ba7-1619-42eb-b114-79bcc167ce03.jpg;maxHeight=1920;maxWidth=900?format=webp' }}" 
-                            alt="{{ $product->name }}" 
-                            class="product-image"
-                        >
-                        
-                        <div class="product-info">
-                            <div class="product-category">{{ $product->categorie->title ?? 'Uncategorized' }}</div>
-                            <h3 class="product-name">{{ $product->name }}</h3>
-                            <p class="product-description">{{ $product->description }}</p>
-                             @if($product->premium)
-                                <div class="premium-badge">⭐ Premium</div>
-                            @endif  
-                            <div class="product-footer">
-                                <span class="product-price">🪙{{ number_format($product->tokens_required, 2) }}</span>
-                               
-                                <button 
-                                    class="add-to-cart-btn" 
-                                    data-id="{{ $product->id }}"
-                                    data-name="{{ htmlspecialchars($product->name, ENT_QUOTES) }}"
-                                    data-tokens_required="{{ $product->tokens_required }}"
-                                    data-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}"
-                                    data-category="{{ htmlspecialchars($product->categorie->title ?? 'Uncategorized', ENT_QUOTES) }}"
-                                    onclick="addToCart(this)"
-                                > @if($product->is_premium)
-        Premium Only
-    @else
-        Add to Cart
-    @endif
-                                  
-                                </button>
-                            </div>
+                <div class="product-card">
+                    <img
+                        src="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}"
+                        alt="{{ $product->name }}"
+                        class="product-image">
 
-                            @auth
-                                @if(auth()->user()->role === 'admin')
-                                    <div class="admin-actions">
-                                        <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Are you sure you want to delete this product?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-delete" style="width: 100%;">
-                                                Delete
-                                            </button>
-                                        </form>
-                                    </div>
+                    <div class="product-info">
+                        <div class="product-category">{{ $product->categorie->title ?? 'Uncategorized' }}</div>
+                        <h3 class="product-name">{{ $product->name }}</h3>
+                        <p class="product-description">{{ $product->description }}</p>
+                        @if($product->premium)
+                        <div class="premium-badge">⭐ Premium</div>
+                        @endif
+                        <div class="product-footer">
+                            <span class="product-price">🪙{{ number_format($product->tokens_required, 2) }}</span>
+
+                            <button
+                                class="add-to-cart-btn"
+                                data-id="{{ $product->id }}"
+                                data-name="{{ htmlspecialchars($product->name, ENT_QUOTES) }}"
+                                data-tokens_required="{{ $product->tokens_required }}"
+                                data-image="{{ $product->image ? asset('storage/' . $product->image) : 'https://via.placeholder.com/280x250' }}"
+                                data-category="{{ htmlspecialchars($product->categorie->title ?? 'Uncategorized', ENT_QUOTES) }}"
+                                onclick="addToCart(this)"> @if($product->is_premium)
+                                Premium Only
+                                @else
+                                Add to Cart
                                 @endif
-                            @endauth
+
+                            </button>
                         </div>
+
+                        @auth
+                        @if(auth()->user()->role === 'admin')
+                        <div class="admin-actions">
+                            <a href="{{ route('products.edit', $product->id) }}" class="btn-edit">
+                                Edit
+                            </a>
+                            <form action="{{ route('products.destroy', $product->id) }}" method="POST" style="flex: 1;" onsubmit="return confirm('Are you sure you want to delete this product?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete" style="width: 100%;">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                        @endif
+                        @endauth
                     </div>
+                </div>
                 @empty
-                    <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999; font-size: 18px;">
-                        No products found matching your criteria.
-                    </p>
+                <p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999; font-size: 18px;">
+                    No products found matching your criteria.
+                </p>
                 @endforelse
             </div>
 
             <!-- Pagination -->
-            
+
         </main>
     </div>
 
@@ -475,13 +471,13 @@
             const tokens_required = parseFloat(button.dataset.tokens_required);
             const image = button.dataset.image;
             const category = button.dataset.category;
-            
+
             // Get existing cart from localStorage or create new array
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            
+
             // Check if product already exists in cart
             const existingProductIndex = cart.findIndex(item => item.id === id);
-            
+
             if (existingProductIndex !== -1) {
                 // Product exists, increase quantity
                 cart[existingProductIndex].quantity += 1;
@@ -497,21 +493,21 @@
                     quantity: 1,
                     addedAt: new Date().toISOString()
                 };
-                
+
                 cart.push(product);
                 showToast(`${name} added to cart!`);
             }
-            
+
             // Save cart to localStorage
             localStorage.setItem('cart', JSON.stringify(cart));
-            
+
             // Update cart count
             updateCartCount();
-            
+
             // Add visual feedback to button - FIXED: use button parameter
             button.textContent = '✓ Added';
             button.classList.add('added');
-            
+
             setTimeout(() => {
                 button.textContent = 'Add to Cart';
                 button.classList.remove('added');
@@ -530,7 +526,7 @@
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            
+
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
@@ -538,7 +534,7 @@
 
         // View cart (redirect to cart page)
         function viewCart() {
-           window.location.href = '/cart';
+            window.location.href = '/cart';
         }
 
         // Additional helper functions
@@ -560,7 +556,7 @@
         function updateQuantity(productId, newQuantity) {
             let cart = getCart();
             const productIndex = cart.findIndex(item => item.id === productId);
-            
+
             if (productIndex !== -1) {
                 if (newQuantity <= 0) {
                     removeFromCart(productId);
