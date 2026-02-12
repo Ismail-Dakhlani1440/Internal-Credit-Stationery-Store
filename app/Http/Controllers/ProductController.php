@@ -25,7 +25,7 @@ class ProductController extends Controller
         if($request->filled('max_price')){
             $products->where('tokens_required' ,'<=' ,$request->max_price);
         }
-      $products  = $products->paginate();
+      $products  = $products->get();
         $categories = Categorie::all();
         return view('store' , compact('products', 'categories'));
     }
@@ -46,6 +46,7 @@ class ProductController extends Controller
         $validated = $request->validate([
            'name' => 'required|string',
            'stock' => 'required|integer',
+           'tokens_required' => 'required|numeric|min:0',
            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
            'categorie_id' => 'required|exists:categories,id',
         ]);
@@ -55,7 +56,7 @@ class ProductController extends Controller
         }
 
         Product::create($validated);
-        return redirect()->route('')->with('success','product added successfully');
+        return redirect()->route('inventory.index')->with('success','product added successfully');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class InventoryController extends Controller
@@ -11,13 +12,15 @@ class InventoryController extends Controller
     public function index()
     {
         $products = Product::all();
-        
+
         return view('admin.inventory.index', compact('products'));
     }
 
     public function create()
     {
-        return view('admin.inventory.create');
+        $categories = Categorie::all();
+
+        return view('admin.inventory.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -28,18 +31,24 @@ class InventoryController extends Controller
             'stock' => 'required|integer|min:0',
             'tokens_required' => 'required|numeric|min:0',
             'premium' => 'boolean',
-            'image' => 'nullable|string'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         Product::create($validated);
 
-        return redirect()->route('admin.inventory.index')->with('success', 'Product created successfully.');
+        return redirect()->route('inventory.index')->with('success', 'Product created successfully.');
     }
 
-    public function edit(Product $product)
+    public function edit(Product $inventory)
     {
-        return view('admin.inventory.edit', compact('product'));
+        $categories = Categorie::all();
+
+        return view('admin.inventory.edit', [
+            'product' => $inventory,
+            'categories' => $categories
+        ]);
     }
+
 
     public function update(Request $request, Product $product)
     {
@@ -49,17 +58,25 @@ class InventoryController extends Controller
             'stock' => 'required|integer|min:0',
             'tokens_required' => 'required|numeric|min:0',
             'premium' => 'boolean',
-            'image' => 'nullable|string'
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
+
+        $validated['premium'] = $request->has('premium');
+
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
 
         $product->update($validated);
 
-        return redirect()->route('admin.inventory.index')->with('success', 'Product updated successfully.');
+        return redirect()->route('inventory.index')->with('success', 'Product updated successfully.');
     }
 
-    public function destroy(Product $product)
+    public function destroy(Product $inventory)
     {
-        $product->delete();
-        return redirect()->route('admin.inventory.index')->with('success', 'Product deleted successfully.');
+        $inventory->delete();
+
+        return redirect()->route('inventory.index')
+            ->with('success', 'Product deleted successfully.');
     }
 }
