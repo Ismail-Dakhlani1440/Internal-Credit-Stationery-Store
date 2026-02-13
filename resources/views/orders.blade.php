@@ -69,7 +69,7 @@
             </td>
 
             <td style="padding:8px;">
-                @if($product->status != 'pending')
+                @if($product->premium)
                     <span style="color:#c0392b; font-weight:bold;">
                         Needs manager approval
                     </span>
@@ -79,10 +79,15 @@
                     </span>
                 @endif
             </td>
+
             <td style="padding:8px;">
-             
-                <span >{{ ucfirst($order->status) }}</span>
-            
+                @if($product->pivot->status == 'pending')
+                    <span style="color:#f39c12;">Pending</span>
+                @elseif($product->pivot->status == 'approved')
+                    <span style="color:#27ae60;">Accepted</span>
+                @else
+                    <span style="color:#c0392b;">Rejected</span>
+                @endif
             </td>
         </tr>
         @endforeach

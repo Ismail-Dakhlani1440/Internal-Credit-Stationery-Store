@@ -409,6 +409,15 @@
             background: #bfdbfe;
         }
 
+        .action-btn.update {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .action-btn.update:hover {
+            background: #a7f3d0;
+        }
+
         .action-btn.delete {
             background: #fee2e2;
             color: #991b1b;
@@ -501,11 +510,11 @@
             </div>
             
             <nav class="nav-menu">
-                <a href="{{ route('products.index') }}" class="nav-item {{ request()->routeIs('store.*') ? 'active' : '' }}">
-                    🏪 Store
-                </a>
                 <a href="{{ route('orders.index') }}" class="nav-item {{ request()->routeIs('orders.*') ? 'active' : '' }}">
                     🧾 Orders
+                </a>
+                <a href="{{ route('products.index') }}" class="nav-item {{ request()->routeIs('store.*') ? 'active' : '' }}">
+                    🏪 Store
                 </a>
             </nav>
         </aside>

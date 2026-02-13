@@ -153,17 +153,36 @@ class OrderController
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $order = Order::with('user', 'products')->findOrFail($id);
+
+        return view('orders.update', compact('order'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'statuses'   => ['required', 'array'],
+            'statuses.*' => ['required', 'in:approved,pending,rejected'],
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        foreach ($request->statuses as $productId => $status) {
+            DB::table('product_order')
+                ->where('order_id', $order->id)
+                ->where('product_id', $productId)
+                ->update(['status' => $status]);
+        }
+
+        $order->status();
+
+        return redirect()->route('orders.index')
+            ->with('success', "Order #{$order->id} has been updated successfully.");
     }
 
     /**
