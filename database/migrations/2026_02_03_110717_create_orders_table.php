@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('total_price');
             $table->enum('status' , ['approved', 'pending','rejected' ,'partial'])->default('pending');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained() ->onDelete('cascade');
             $table->timestamps();
         });
     }

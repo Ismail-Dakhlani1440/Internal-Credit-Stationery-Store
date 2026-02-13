@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin Panel')</title>
+    <title>@yield('title', 'Manager Dashboard')</title>
     
     <style>
         * {
@@ -21,7 +21,7 @@
         }
 
         /* Layout Structure */
-        .admin-wrapper {
+        .manager-wrapper {
             display: flex;
             min-height: 100vh;
         }
@@ -292,6 +292,16 @@
             color: #065f46;
         }
 
+        .badge-yellow {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
         .badge-purple {
             background: #e9d5ff;
             color: #7c3aed;
@@ -399,6 +409,15 @@
             background: #bfdbfe;
         }
 
+        .action-btn.update {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .action-btn.update:hover {
+            background: #a7f3d0;
+        }
+
         .action-btn.delete {
             background: #fee2e2;
             color: #991b1b;
@@ -482,20 +501,20 @@
     </style>
 </head>
 <body>
-    <div class="admin-wrapper">
+    <div class="manager-wrapper">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1>⚡ Admin Panel</h1>
-                <p>Employee Management System</p>
+                <h1>⚡ Manager Dashboard</h1>
+                <p>Order Management System</p>
             </div>
             
             <nav class="nav-menu">
-                <a href="{{ route('employees.index') }}" class="nav-item {{ request()->routeIs('admin.employees.*') ? 'active' : '' }}">
-                    👥 Employees
+                <a href="{{ route('orders.index') }}" class="nav-item {{ request()->routeIs('orders.*') ? 'active' : '' }}">
+                    🧾 Orders
                 </a>
-                <a href="{{ route('inventory.index') }}" class="nav-item {{ request()->routeIs('admin.inventory.*') ? 'active' : '' }}">
-                    📦 Inventory
+                <a href="{{ route('products.index') }}" class="nav-item {{ request()->routeIs('store.*') ? 'active' : '' }}">
+                    🏪 Store
                 </a>
             </nav>
         </aside>
@@ -507,8 +526,8 @@
                 
                 <div class="user-menu">
                     <div class="user-info">
-                        <div class="user-name">{{ Auth::user()?->name ?? 'Guest' }}</div>
-                        <div class="user-role">{{ Auth::user()->role->title ?? 'Administrator' }}</div>
+                        <div class="user-name">{{ Auth::user()->name }}</div>
+                        <div class="user-role">{{ Auth::user()->role->title ?? 'Manager' }}</div>
                     </div>
                     <form method="POST" action="{{ route('logout') }}" style="display: inline;">
                         @csrf

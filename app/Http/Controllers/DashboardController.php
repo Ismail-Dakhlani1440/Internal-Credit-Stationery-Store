@@ -13,11 +13,11 @@ class DashboardController
         }
 
         if ($user->role_id == 2) {
-            return view('dashboard.manager');
+            return redirect()->route('orders.index');
         }
 
         if ($user->role_id == 3) {
-            return view('dashboard.employee');
+            return redirect()->route('products.index');
         }
 
         abort(403);

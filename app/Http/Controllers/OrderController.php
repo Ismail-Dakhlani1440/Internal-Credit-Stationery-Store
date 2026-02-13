@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class OrderController
@@ -14,8 +16,8 @@ class OrderController
      */
     public function index()
     {
-        $orders = Order::all();
-
+        $users = User::where('department_id', auth()->user()->department_id)->get();
+        $orders = Order::whereIn('user_id', $users->pluck('id'))->where('status', '!=', 'rejected')->orWhere('status', '!=', 'approved')->with('products')->get();
         return view('orders.index', compact('orders'));
     }
 
@@ -88,7 +90,7 @@ class OrderController
                 $product = Product::findOrFail($item['id']);
 
                 
-                if ($user->role->name == 'manager') {
+                if ($user->role->title == 'manager') {
                     $status = 'approved'; 
                 } else {
                     $status = $product->premium ? 'pending' : 'approved';
@@ -142,23 +144,45 @@ class OrderController
      */
     public function show(string $id)
     {
-        //
+        $orders = auth()->user()->orders()->get();
+       
+        return view('orders', compact('orders'));
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $order = Order::with('user', 'products')->findOrFail($id);
+
+        return view('orders.update', compact('order'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'statuses'   => ['required', 'array'],
+            'statuses.*' => ['required', 'in:approved,pending,rejected'],
+        ]);
+
+        $order = Order::findOrFail($id);
+
+        foreach ($request->statuses as $productId => $status) {
+            DB::table('product_order')
+                ->where('order_id', $order->id)
+                ->where('product_id', $productId)
+                ->update(['status' => $status]);
+        }
+
+        $order->status();
+
+        return redirect()->route('orders.index')
+            ->with('success', "Order #{$order->id} has been updated successfully.");
     }
 
     /**

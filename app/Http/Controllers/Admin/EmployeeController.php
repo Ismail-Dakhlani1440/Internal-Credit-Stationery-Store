@@ -7,12 +7,13 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = User::where('role_id', 3)->get();
+        $employees = User::whereIn('role_id', [2,3])->get();
 
         return view('admin.employees.index', compact('employees'));
     }
@@ -27,22 +28,18 @@ class EmployeeController extends Controller
 
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name'          => 'required',
-            'email'         => 'required|email|unique:users',
+        {
+            $validate = $request->validate([
+            'name'          => 'required|string|max:255',
+            'email'         => 'required|email|unique:users,email',
             'password'      => 'required|min:6',
-            'role_id'       => 'required',
-            'department_id' => 'nullable',
+            'role_id'       => 'required|exists:roles,id',
+            'department_id' => 'required|exists:departments,id',
         ]);
 
-        User::create([
-            'name'          => $request->name,
-            'email'         => $request->email,
-            'password'      => $request->password, // hash auto via casts()
-            'role_id'       => $request->role_id,
-            'department_id' => $request->department_id,
-        ]);
+        $validate['password'] = Hash::make($validate['password']);
+
+        User::create($validate);
 
         return redirect()->route('employees.index')
             ->with('success', 'Employé ajouté avec succès');
